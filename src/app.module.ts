@@ -6,9 +6,10 @@ import { PrismaService } from './prisma/prisma.service';
 import { WebsiteController } from './website/website.controller';
 import { AppController } from './app.controller';
 import { AppService } from './App.service';
+import { RequestModule } from './request/request.module';
 
 @Module({
-  imports: [WebsiteModule, OwnerModule],
+  imports: [WebsiteModule, OwnerModule, RequestModule],
   controllers: [AppController],
   providers: [AppService],
 })
