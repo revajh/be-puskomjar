@@ -9,33 +9,53 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url  	    = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
   // uncomment next line if you use Prisma <5.10
   // directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 model Owner {
-  id      Int    @id @default(autoincrement())
-  name    String 
-  alias String 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
- 
-website Website?
+  id        Int       @id @default(autoincrement())
+  name      String
+  alias     String
+  is_active Boolean   @default(true)
+  website   Website[]
+  Letter Letter[]
+
+  @@map("Departements")
 
   
-} 
-
-model Website{
-  id  Int    @id @default(autoincrement())
-  name String
-   link  String
-   provider String
-   payment_lastest DateTime
-   
-   
-   owner   Owner @relation(fields: [ownerId], references: [id])
-   ownerId   Int @unique
 }
 
+model Website {
+  id              Int      @id @default(autoincrement())
+  name            String
+  link            String
+  provider        String
+  payment_lastest DateTime 
+  is_active       Boolean  @default(true)
+
+  owner   Owner @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId Int
+}
+
+model Letter{
+  id            Int      @id @default(autoincrement())
+  number        Int      @default(autoincrement())  @unique
+  about         String
+  date_of_letter DateTime
+  link          String
+  is_active       Boolean  @default(true)
+
+  owner   Owner @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId Int
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  username      String   @unique
+  email         String   @unique
+  password      String  
+  refreshToken  String?
+}
